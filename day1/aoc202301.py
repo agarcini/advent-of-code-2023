@@ -7,48 +7,33 @@ def parse(puzzle_input):
 
     return puzzle_input.split()
 
-def part1(data):
-    """Solve part 1."""
+def findCalibrationValue(string, includeWords):
 
-    def replaceNumberWords(line):
+    indices = []
+
+    numbers = []
+
+    # Index of integer matches the word
+    integers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+
+    for number in integers:
+
+        word = number
+
+        index = integers.index(number)
+
+        indexOfInteger = string.find(str(index))
+
+        while indexOfInteger >= 0:
         
-        line = line.replace('one', 'o1e')
-        line = line.replace('two', 't2o')
-        line = line.replace('three', 't3e')
-        line = line.replace('four', 'f4r')
-        line = line.replace('five', 'f5e')
-        line = line.replace('six', 's6x')
-        line = line.replace('seven', 's7n')
-        line = line.replace('eight', 'e8t')
-        line = line.replace('nine', 'n9e')
+            indices.append(indexOfInteger)
 
-        return line
+            numbers.append(index)
 
-    def findCalibrationValue(string):
+            indexOfInteger = string.find(str(index), indexOfInteger + 1)
 
-        indices = []
-
-        numbers = []
-
-        # Index of integer matches the word
-        integers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-
-        for number in integers:
-
-            word = number
-
-            index = integers.index(number)
-
-            indexOfInteger = string.find(str(index))
-
-            while indexOfInteger >= 0:
+        if includeWords == True:
             
-                indices.append(indexOfInteger)
-
-                numbers.append(index)
-
-                indexOfInteger = string.find(str(index), indexOfInteger + 1)
-
             indexOfWord = string.find(word)
 
             while indexOfWord >= 0:
@@ -57,28 +42,35 @@ def part1(data):
 
                 numbers.append(index)
 
-                indexOfWord = string.find(str(index), indexOfWord + 1)
-        
-        firstDigit = str(numbers[indices.index(min(indices))])
+                indexOfWord = string.find(word, indexOfWord + 1)
+    
+    firstDigit = str(numbers[indices.index(min(indices))])
 
-        lastDigit = str(numbers[indices.index(max(indices))])
+    lastDigit = str(numbers[indices.index(max(indices))])
 
-        calibrationValue = int(''.join((firstDigit, lastDigit)))
+    calibrationValue = int(''.join((firstDigit, lastDigit)))
 
-        return calibrationValue
+    return calibrationValue
+
+def findCalibrationValuesSum(data, includeWords = False):
     
     calibrationValues = []
 
     for line in data:
 
-        calibrationValues.append(findCalibrationValue(replaceNumberWords(line)))
-
-    print(calibrationValues)
+        calibrationValues.append(findCalibrationValue(line, includeWords))
 
     return reduce(lambda a, b: a + b, calibrationValues)
 
+def part1(data):
+    """Solve part 1."""
+    
+    return findCalibrationValuesSum(data, False)
+
 def part2(data):
     """Solve part 2."""
+    
+    return findCalibrationValuesSum(data, True)
 
 def solve(puzzle_input):
     """Solve the puzzle for the given input."""
