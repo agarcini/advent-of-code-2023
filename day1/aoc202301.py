@@ -31,7 +31,7 @@ def part1(data):
         numbers = []
 
         # Index of integer matches the word
-        integers = ['oh', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+        integers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 
         for number in integers:
 
@@ -41,19 +41,23 @@ def part1(data):
 
             indexOfInteger = string.find(str(index))
 
-            if indexOfInteger >= 0:
+            while indexOfInteger >= 0:
             
                 indices.append(indexOfInteger)
 
                 numbers.append(index)
 
-            #indexOfWord = string.find(word)
+                indexOfInteger = string.find(str(index), indexOfInteger + 1)
 
-            #if indexOfWord >= 0:
+            indexOfWord = string.find(word)
 
-                #indices.append(indexOfWord)
+            while indexOfWord >= 0:
 
-                #numbers.append(index)
+                indices.append(indexOfWord)
+
+                numbers.append(index)
+
+                indexOfWord = string.find(str(index), indexOfWord + 1)
         
         firstDigit = str(numbers[indices.index(min(indices))])
 
@@ -67,7 +71,7 @@ def part1(data):
 
     for line in data:
 
-        calibrationValues.append(findCalibrationValue(line))
+        calibrationValues.append(findCalibrationValue(replaceNumberWords(line)))
 
     print(calibrationValues)
 
